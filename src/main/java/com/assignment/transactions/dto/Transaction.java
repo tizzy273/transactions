@@ -5,7 +5,9 @@ import com.assignment.transactions.validation.ValueOfEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.PreUpdate;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.validation.annotation.Validated;
 
@@ -26,6 +28,6 @@ public class Transaction {
 
     private LocalDateTime timeStamp;
 
-    private float amount;
+    private Float amount;
 
 }

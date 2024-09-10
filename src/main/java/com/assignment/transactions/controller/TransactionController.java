@@ -21,7 +21,7 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @GetMapping("/history")
-    public ResponseEntity<List<Transaction>> getTransactionsHistorFy(@RequestParam(name = "account-id") Integer accountId){
+    public ResponseEntity<List<Transaction>> getTransactionsHistory(@RequestParam(name = "account-id") Integer accountId){
         return new ResponseEntity<>(transactionService.getTransactionHistory(accountId), HttpStatus.OK);
     }
 
