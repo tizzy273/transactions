@@ -3,6 +3,7 @@ package com.assignment.transactions.controller;
 import com.assignment.transactions.dto.Transaction;
 import com.assignment.transactions.service.TransactionService;
 import com.assignment.transactions.validation.TransactionValid;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,9 +26,12 @@ public class TransactionController {
     }
 
     @PostMapping("/create-transaction")
-    public ResponseEntity<List<Transaction>> addTransactionToAccount(@Valid @RequestBody @TransactionValid Transaction transaction){
+    public ResponseEntity<List<Transaction>> addTransaction(@Valid @RequestBody @TransactionValid Transaction transaction){
 
-        return new ResponseEntity<>(transactionService.addTransactionToAccount(transaction), HttpStatus.OK);
+        return new ResponseEntity<>(transactionService.         addTransaction(transaction), HttpStatus.OK);
     }
+
+
+
 
 }

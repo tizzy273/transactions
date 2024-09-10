@@ -23,6 +23,7 @@ public class Transaction {
     private String type;
 
     @Column(name = "TIMESTAMP")
+
     private LocalDateTime timeStamp;
 
     private float amount;

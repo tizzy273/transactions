@@ -2,6 +2,7 @@ package com.assignment.transactions.service;
 
 import com.assignment.transactions.dto.Transaction;
 import com.assignment.transactions.entity.TransactionEntity;
+import com.assignment.transactions.exception.BadRequestException;
 import com.assignment.transactions.mapper.TransactionMapper;
 import com.assignment.transactions.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +20,19 @@ public class TransactionService {
     private TransactionMapper transactionMapper;
 
 
-    public List<Transaction> addTransactionToAccount(Transaction transaction) {
-        transactionRepository.save(transactionMapper.toEntity(transaction));
+    public List<Transaction> addTransaction(Transaction transaction) {
 
-        return transactionMapper.mapList(transactionRepository.getTransactionByAccountId(transaction.getAccountId()));
+
+        transactionRepository.save(transactionMapper.toEntity(transaction));
+        return transactionMapper.mapList(transactionRepository.getTransactionByAccountIdOrderByTimeStampDesc(transaction.getAccountId()));
 
     }
 
 
     public List<Transaction> getTransactionHistory(Integer accountId){
-        return transactionMapper.mapList(transactionRepository.getTransactionByAccountId(accountId));
+        return transactionMapper.mapList(transactionRepository.getTransactionByAccountIdOrderByTimeStampDesc(accountId));
     }
+
+
 
 }

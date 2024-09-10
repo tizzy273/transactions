@@ -11,18 +11,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static com.assignment.transactions.enums.TransactionType.DEPOSIT;
+
 public class TransactionValidator implements ConstraintValidator<TransactionValid, Transaction> {
 
     @Autowired
     private TransactionRepository transactionRepository;
 
+
     @Override
     public boolean isValid(Transaction transaction, ConstraintValidatorContext constraintValidatorContext) {
+
+        if(transaction.getAmount() == 0){
+            throw new BadRequestException("Your transaction cannot have a value of 0");
+        }
+
         if(transaction.getType().equals(TransactionType.WITHDRAWAL.name())){
-            List<TransactionEntity> transactions = transactionRepository.getTransactionByAccountId(transaction.getAccountId());
+            List<TransactionEntity> transactions = transactionRepository.getTransactionByAccountIdOrderByTimeStampDesc(transaction.getAccountId());
 
             float amount = transaction.getAmount();
-            float accountBalance = accountBalance(transactions);
+            float accountBalance = sumTransactionsAmount(transactions);
 
             if(amount > accountBalance) {
                 throw new BadRequestException("This account does not have enough funds to process a withdrawal of " + amount);
@@ -32,9 +40,12 @@ public class TransactionValidator implements ConstraintValidator<TransactionVali
         return true;
     }
 
-    private static Float accountBalance(List<TransactionEntity> transactions) {
+    private Float sumTransactionsAmount(List<TransactionEntity> transactions) {
         return transactions.stream()
-                .map(TransactionEntity::getAmount)
+                .map(
+                        transaction ->
+                                transaction.getType().equals(DEPOSIT.name()) ? transaction.getAmount() : -transaction.getAmount()
+                )
                 .reduce(0f, Float::sum);
     }
 }
