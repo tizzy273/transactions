@@ -2,6 +2,7 @@ package com.assignment.transactions.cucumber.glue;
 
 import com.assignment.transactions.dto.ErrorDto;
 import com.assignment.transactions.dto.Transaction;
+import com.assignment.transactions.entity.TransactionEntity;
 import com.assignment.transactions.enums.TransactionType;
 import com.assignment.transactions.repository.TransactionRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,6 +28,9 @@ import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TransactionScenario {
+
+    public static final String CREATE_TRANSACTION = "http://localhost:8082/transactions/transaction/create-transaction";
+    public static final String TRANSACTION_HISTORY = "http://localhost:8082/transactions/transaction/history";
 
     private Response response;
 
@@ -61,7 +65,7 @@ public class TransactionScenario {
         response = given()
                 .header("Content-Type", "application/json")
                .body(entityToJson(transaction))
-                .post("http://localhost:8082/transactions/transaction/create-transaction");
+                .post(CREATE_TRANSACTION);
     }
 
     @Then("the transaction should be created successfully")
@@ -104,5 +108,40 @@ public class TransactionScenario {
         transaction = new Transaction();
         transaction.setType(type);
         transaction.setAccountId(1);
+    }
+
+
+    @When("I call the Transaction History endpoint with AccountId param = {int}")
+    public void iCallTheTransactionHistoryEndpoint(int accountId) {
+        response = given()
+                .header("Content-Type", "application/json")
+                .get(TRANSACTION_HISTORY + "?account-id="+ accountId);
+    }
+
+    @Given("an instance of the DB where there are multiple Transactions")
+    public void anInstanceOfTheDBWhereThereAreMultipleTransactions() {
+
+        transactionRepository.save(new TransactionEntity(TransactionType.DEPOSIT.name(), 1, 10000f));
+        transactionRepository.save(new TransactionEntity(TransactionType.DEPOSIT.name(), 2, 10000f));
+        transactionRepository.save(new TransactionEntity(TransactionType.DEPOSIT.name(), 3, 10000f));
+        transactionRepository.save(new TransactionEntity(TransactionType.DEPOSIT.name(), 4, 10000f));
+        transactionRepository.save(new TransactionEntity(TransactionType.DEPOSIT.name(), 5, 10000f));
+        transactionRepository.save(new TransactionEntity(TransactionType.DEPOSIT.name(), 1, 10000f));
+        transactionRepository.save(new TransactionEntity(TransactionType.DEPOSIT.name(), 1, 10000f));
+
+    }
+
+    @Then("I'll get all the transactions with AccountID = {int}")
+    public void iLlGetAllTheTransactionsWithAccountID(int accountId) {
+        response.then()
+                .statusCode(200);
+
+        List<Transaction> transactions = response.body()
+                .jsonPath()
+                .getList(".", Transaction.class);
+
+       List<Integer> accountIdList =  transactions.stream().map(Transaction::getAccountId).toList();
+
+       accountIdList.forEach(a -> assertEquals(accountId, a));
     }
 }

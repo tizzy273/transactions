@@ -1,5 +1,6 @@
 server:
   port: 8082
+  url: http://localhost:${server.port}
 
 application:
   name: Transactions

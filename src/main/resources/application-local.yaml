@@ -8,7 +8,7 @@ application:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:mydb
+    url: jdbc:h2:mem:local
     username: transactions
     password: password
     driverClassName: org.h2.Driver

@@ -29,6 +29,13 @@ public class TransactionEntity {
 
     private Float amount;
 
+    public TransactionEntity(String type, Integer accountId, Float amount) {
+        this.type = type;
+        this.accountId = accountId;
+        this.amount = amount;
+
+    }
+
     @PrePersist
     private void prePersist() {
         this.setTimeStamp(LocalDateTime.now());

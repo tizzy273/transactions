@@ -30,6 +30,11 @@ Feature: Transactions
     When I call the Create Transaction endpoint
     Then I'll get HTTP Status Code 400 with message 'You have to define an amount for your transaction'
 
+  Scenario: Create Transaction KO NO Amount
+    Given an instance of the DB where there are multiple Transactions
+    When I call the Transaction History endpoint with AccountId param = 1
+    Then I'll get all the transactions with AccountID = 1
+
 
 
 

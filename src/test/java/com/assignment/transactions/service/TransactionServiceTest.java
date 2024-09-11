@@ -67,7 +67,5 @@ public class TransactionServiceTest {
 
         assertEquals(transactionsDto, transactionService.getTransactionHistory(1));
 
-
-
     }
 }
