@@ -1,6 +1,7 @@
 package com.assignment.transactions.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "TRANSACTION", schema = "TRANSACTIONS")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class TransactionEntity {
 
     @Id

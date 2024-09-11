@@ -1,8 +1,6 @@
 package com.assignment.transactions.service;
 
 import com.assignment.transactions.dto.Transaction;
-import com.assignment.transactions.entity.TransactionEntity;
-import com.assignment.transactions.exception.BadRequestException;
 import com.assignment.transactions.mapper.TransactionMapper;
 import com.assignment.transactions.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +20,8 @@ public class TransactionService {
 
     public List<Transaction> addTransaction(Transaction transaction) {
 
-
         transactionRepository.save(transactionMapper.toEntity(transaction));
         return transactionMapper.mapList(transactionRepository.getTransactionByAccountIdOrderByTimeStampDesc(transaction.getAccountId()));
-
     }
 
 

@@ -49,7 +49,7 @@ public class TransactionValidator implements ConstraintValidator<TransactionVali
 
     private void amountChecks(Transaction transaction) {
         if(transaction.getAmount() == null){
-            throw new BadRequestException("Your have to define an amount for your transaction");
+            throw new BadRequestException("You have to define an amount for your transaction");
         }
         if(transaction.getAmount() == 0){
             throw new BadRequestException("Your transaction cannot have a value of 0");
